@@ -1,0 +1,25 @@
+body {
+  /* Use a "Matrix"-style color scheme. */
+  background-color: black;
+  color: blue;
+  font-family: monospace;
+  font-size: 1.5em
+}
+
+ul {
+  /* Wrap the list in a green box. */
+  width: 300px;
+  border: 1px solid #00ff00
+  background-color: #329DC3
+  color: white
+}
+
+li {
+  /* Add a bit more spacing between list items. */
+  padding: 5px;
+}
+
+.selected {
+  background-color: #89CFF0;
+  color: #329DC3
+}

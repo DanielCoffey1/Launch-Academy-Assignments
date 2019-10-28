@@ -1,0 +1,12 @@
+<form action="/parties/new" method="post">
+  <label for="name">New Name:</label>
+  <input type="text" id="name" name="name" value="<%= flash[:name] %>">
+
+  <label for="description">New Description:</label>
+  <input type="text" id="description" name="description" value="<%= flash[:description] %>">
+
+  <label for="location">New Location:</label>
+  <input type="text" id="location" name="location" value="<%= flash[:location] %>">
+
+<input type="submit">
+</form>

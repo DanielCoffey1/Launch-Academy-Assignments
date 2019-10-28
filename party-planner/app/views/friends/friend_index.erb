@@ -1,0 +1,14 @@
+<h1>Friends</h1>
+
+  <% @friends.each do |friend| %>
+     <ul>
+       <h3>
+         <li>
+            <%= friend['first_name'] %>
+            <%= friend['last_name'] %>
+         </li>
+       </h3>
+     </ul>
+  <% end %>
+
+  <h3><a href="friends/new" target='_blank'>Add New Friend</a></h3>

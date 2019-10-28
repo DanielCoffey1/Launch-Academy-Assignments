@@ -1,0 +1,23 @@
+<h1><%= @party["name"] %></h1>
+<p><%= @party["location"] %></p>
+<h4><%= @party["description"] %></h4>
+
+
+<form method='post' action='<%= params['id'] %>'>
+<select name="friend">
+<% @friends.each do |friend| %>
+<option value="<%= friend.id %>">  <%= friend['first_name'] %> <%= friend['last_name'] %> </option>
+<% end %>
+<input type="submit" value='Add Friend'/>
+</select>
+</form>
+
+
+<h2>Invited friends</h2>
+<ul>
+<% if @guest_list != [] %>
+  <% @guest_list.each do |guest| %>
+    <%= guest.friend["first_name"]  %> <%= guest.friend["last_name"] %> <br>
+  <% end %>
+<% end %>
+</ul>

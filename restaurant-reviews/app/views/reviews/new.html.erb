@@ -1,0 +1,31 @@
+<h1>Review Form for <%= @restaurant.name %></h1>
+
+<%= form_for [@restaurant, @review] do |f| %>
+
+<% if @review.errors.any? %>
+  <!-- if there are errors, do something -->
+  <div class="alert">
+    <strong><%= pluralize(@review.errors.count, "error") %> need to be fixed before you may "Add a Review:"</strong>
+
+    <ul>
+      <% @review.errors.full_messages.each do |message| %>
+      <!-- do stuff for each error -->
+        <li><%= message %></li>
+        <!-- error messages -->
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+  <div class="field">
+    <%= f.label :rating, 'Number Rating:' %> <br>
+    <%= f.text_field :rating %>
+  </div>
+
+  <div class="field">
+    <%= f.label :body, 'Review' %> <br>
+    <%= f.text_field :body %>
+  </div>
+
+  <%= f.submit "Add Review" %>
+<% end %>

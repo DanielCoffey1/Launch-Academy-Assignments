@@ -1,0 +1,18 @@
+.page-header {
+  color: #0099CC;
+  font-family: "Kosugi", sans-serif;
+}
+
+.blurb {
+  color: #FF0000;
+  font-family: "Montserrat", monospace;
+}
+
+img {
+  height: 200px;
+  width: 200px;
+}
+
+a {
+  font-weight: bold;
+}

@@ -1,0 +1,16 @@
+<h1>Parties</h1>
+
+  <% @parties.each do |party| %>
+     <ul>
+       <h3>
+         <li>
+           <a href= "party/<%=party['id']%>" > <%= party['name'] %></a>
+         </li>
+       </h3>
+     </ul>
+  <% end %>
+  <h4><% if flash[:success] != "" %></h4>
+    <%= flash[:success]  %>
+  <% end %>
+
+<h3><a href="parties/new" target='_blank'>Add New Party</a></h3>

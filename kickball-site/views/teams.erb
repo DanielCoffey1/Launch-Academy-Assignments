@@ -1,0 +1,7 @@
+    <ul>
+      <% @league.teams.each do |team| %>
+        <li>
+          <a href="/team.name/<%= team.name %>"><%= team.name %></a>
+        </li>
+      <% end %>
+    </ul>

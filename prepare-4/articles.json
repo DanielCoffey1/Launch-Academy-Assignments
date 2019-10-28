@@ -1,0 +1,34 @@
+{
+  "articles": [
+    {
+      "id": 1,
+      "title": "JavaScript Promises",
+      "body": "Don't make Promises you can't resolve! Keep all your promises! Even this one."
+    },
+    {
+      "id": 2,
+      "title": "Just Harry Potter Things...",
+      "body": "Something something muggle. Something something hufflepuff. Something something Ravenclaw. Something something Slytherin."
+    },
+    {
+      "id": 3,
+      "title": "The Hobbies of Flying Monkeys",
+      "body": "Mostly they like flying. They also like throwing stuff at passers-by."
+    },
+    {
+      "id": 4,
+      "title": "React Blogs are Okay",
+      "body": "This might be the most complicated blog I've ever started."
+    },
+    {
+      "id": 5,
+      "title": "How to clear a submitted form with React",
+      "body": "Cross your fingers and hope it works."
+    },
+    {
+      "id": 6,
+      "title": "This is my final submission.",
+      "body": "The time is up.\n"
+    }
+  ]
+}

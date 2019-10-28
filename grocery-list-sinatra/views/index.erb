@@ -1,0 +1,20 @@
+<h1>Grocery List</h1>
+<% require 'pry' %>
+
+<% if @error %>
+  <p>
+  <%= @error %>
+  </p>
+<% end %>
+
+<ul>
+  <% @groceries.each do |grocery| %>
+    <li><%= grocery["name"] %></li>
+  <% end %>
+</ul>
+
+<form action="/groceries" method="post">
+  <label for="name">Name</label>
+  <input type="text" name="name" id="name">
+<input type="submit" value="Add">
+</form>

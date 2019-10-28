@@ -1,0 +1,20 @@
+/*Your styles here*/
+header {
+  font-family: serif;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+.purple-banner {
+  background-color: #40376E;
+}
+
+.green-banner {
+  background-color: #AAC0AA;
+}
+
+.gray-banner {
+  background-color: #7D8491;
+}

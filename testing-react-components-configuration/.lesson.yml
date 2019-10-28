@@ -1,0 +1,9 @@
+---
+title: "Configuring Tests for React Components"
+type: "article"
+description: "Learn how to configure your test environment for React components"
+tags: "javascript, react, karma, jasmine, enzyme"
+behaviors:
+  - react_on_node
+ignore:
+- "node_modules"

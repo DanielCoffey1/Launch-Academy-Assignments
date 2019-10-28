@@ -1,0 +1,289 @@
+## Learning Objectives
+* Understand the purpose of the Enzyme library.
+* Setup Enzyme with Karma and Jasmine.
+* Learn to test React components with Enzyme.
+
+## Introduction
+We've used Jasmine to write and run tests for Javascript code, but how do we test React components? React testing can be tricky because many libraries have a limited ability to traverse parent/child component "trees" and to deal with asynchronous Javascript. Luckily, we can use the well-documented Enzyme library created by AirBnb. Enzyme can be used with Karma, Jasmine, and Phantom JS for feature testing. But first, some introductions.
+
+#### Karma
+[Karma](https://karma-runner.github.io/0.13/index.html) is a test-runner for JavaScript. It can be run from the command line and will run our test suite automatically. It can also save you time because it will automatically re-run your tests every time you make a change to the source files or test files.
+
+#### Enzyme
+[Enzyme](https://github.com/airbnb/enzyme) is a library built on top of React's [Test Utilities](https://facebook.github.io/react/docs/test-utils.html) add-on. Together, they provide the ability to navigate component trees, simulate events (like clicking or scrolling), and test component lifecycle methods (like `componentDidMount`).
+
+#### Jasmine
+We've used [Jasmine](https://jasmine.github.io/2.4/introduction.html) before to test our vanilla JS code. By using `jasmine-enzyme`, we have access to all of Jasmine's built-in matchers such as `toBePresent`, `toEqual`, and `toBeDefined`.  Think of it like Capybara, but for React testing.
+
+#### PhantomJS
+[PhantomJS](http://phantomjs.org/) is a headless browser. If we remember that JavaScript "lives" in the browser, we can think of PhantomJS as a way to test our JavaScript/JSX output from the command line instead of having to run a web browser.
+
+
+## Setup
+
+```sh
+et get testing-react-components-configuration
+cd testing-react-components-configuration
+yarn install
+```
+
+```sh
+yarn install --dev jasmine-core karma@1.7.0 karma-jasmine
+```
+
+This last command will install both Jasmine and Karma, and will enable Jasmine to run in the Karma test-runner.
+
+Next, run:
+
+```sh
+yarn global add karma-cli
+```
+
+This will allow karma to run from the terminal. Note that you only have to run this once on your machine, and it installs globally!
+
+We'll also need to install a json-loader by running from the command line:
+
+```sh
+yarn add --dev json-loader
+```
+
+Next, we want to install PhantomJS:
+
+```sh
+yarn add --dev karma-phantomjs-launcher phantomjs-prebuilt
+```
+
+This command will also make sure that PhantomJS runs automatically when Karma runs.
+
+To install enzyme, we will run the following:
+
+```sh
+yarn add --dev enzyme@2.8.2 react-addons-test-utils
+```
+
+This installs both the enzyme library and the [Test Utilities](https://facebook.github.io/react/docs/test-utils.html) peer dependency. Then, navigate to the `karma.conf.js` file and add the following `externals` property to the `webpack` section:
+
+```javascript
+// karma.conf.js
+...
+  // webpack configuration used by karma-webpack
+  webpack: {
+    // generate sourcemaps
+    devtool: 'eval-source-map',
+    // enzyme-specific setup
+    externals: {
+      'cheerio': 'window',
+      'react/addons': true,
+      'react/lib/ExecutionEnvironment': true,
+      'react/lib/ReactContext': true
+    },
+    module: {
+      loaders: [
+        // use babel-loader to transpile the test and src folders
+        {
+          test: /\.jsx?$/,
+          exclude: /node_modules/,
+          loader: 'babel-loader'
+        },
+        // use isparta-loader for ES6 code coverage in the src folder
+        {
+          test: /\.jsx?$/,
+          exclude: /(node_modules|test)/,
+          loader: 'isparta-loader'
+        },
+        {
+          test: /\.json$/,
+          include: [
+            /node_modules/,
+            path.resolve(__dirname, '..')
+          ],
+          loader: 'json-loader'
+        }
+      ]
+    },
+
+...
+```
+
+This change in our `karma.conf.js` allows us to ignore certain files when we are [using Enzyme with
+Webpack](https://github.com/airbnb/enzyme/blob/master/docs/guides/webpack.md).
+
+At this point, the complete `karma.conf.js` file should now look like this:
+
+```javascript
+var path = require('path');
+
+module.exports = function(config) {
+  config.set({
+    // use the PhantomJS browser
+    browsers: ['PhantomJS'],
+
+    // use the Jasmine testing framework
+    frameworks: ['jasmine'],
+
+    // files that Karma will server to the browser
+    files: [
+      // use Babel polyfill to emulate a full ES6 environment in PhantomJS
+      'node_modules/babel-polyfill/dist/polyfill.js',
+      // entry file for Webpack
+      'test/testHelper.js'
+    ],
+
+    // before serving test/testHelper.js to the browser
+    preprocessors: {
+      'test/testHelper.js': [
+        // use karma-webpack to preprocess the file via webpack
+        'webpack',
+        // use karma-sourcemap-loader to utilize sourcemaps generated by webpack
+        'sourcemap'
+      ]
+    },
+
+    // webpack configuration used by karma-webpack
+    webpack: {
+      // generate sourcemaps
+      devtool: 'eval-source-map',
+      externals: {
+        'cheerio': 'window',
+        'react/addons': true,
+        'react/lib/ExecutionEnvironment': true,
+        'react/lib/ReactContext': true
+      },
+      module: {
+        loaders: [
+          // use babel-loader to transpile the test and src folders
+          {
+            test: /\.jsx?$/,
+            exclude: /node_modules/,
+            loader: 'babel-loader'
+          },
+          // use isparta-loader for ES6 code coverage in the src folder
+          {
+            test: /\.jsx?$/,
+            exclude: /(node_modules|test)/,
+            loader: 'isparta-loader'
+          },
+          {
+            test: /\.json$/,
+            include: [
+              /node_modules/,
+              path.resolve(__dirname, '..')
+            ],
+            loader: 'json-loader'
+          }
+        ]
+      },
+    },
+
+    webpackMiddleware: {
+      // do not output webpack build information to the browser's console
+      noInfo: true
+    },
+
+    // test reporters that Karma should use
+    reporters: [
+      // use karma-spec-reporter to report results to the browser's console
+      'spec',
+      // use karma-coverage to report test coverage
+      'coverage'
+    ],
+
+    // karma-spec-reporter configuration
+    specReporter: {
+      // remove meaningless stack trace when tests do not pass
+      maxLogLines: 1,
+      // do not print information about tests that are passing
+      suppressPassed: true
+    },
+
+    // karma-coverage configuration
+    coverageReporter: {
+      // output coverage results to the coverage folder in the project's root
+      dir: 'coverage',
+      subdir: '.',
+      // output coverage results as html
+      type: 'html'
+    }
+  })
+}
+```
+
+We are all set up to use Enzyme now. However, we will also install
+[`jasmine-enzyme`](https://www.npmjs.com/package/jasmine-enzyme) to use all of Jasmine's handy matchers in our Enzyme tests. To install we run:
+
+```sh
+yarn add --dev jasmine-enzyme
+```
+
+Now that the setup is done, let's check to see that it's configured properly!
+
+## Running Your Tests
+
+Navigate to `test/components/Elephant.js` and add the following test:
+
+```javascript
+describe('Elephant', () => {
+  it('should return true', () => {
+    expect(true).toEqual(true);
+  });
+})
+```
+
+Run the test suite with:
+```sh
+yarn run test
+```
+
+And you should see a passing test!
+
+```no-highlight
+18 01 2018 15:12:22.958:WARN [karma]: No captured browser, open http://localhost:9876/
+18 01 2018 15:12:22.966:INFO [karma]: Front-end scripts not present. Compiling...
+18 01 2018 15:12:24.341:INFO [karma]: Karma v2.0.0 server started at http://0.0.0.0:9876/
+18 01 2018 15:12:24.342:INFO [launcher]: Launching browser PhantomJS with unlimited concurrency
+18 01 2018 15:12:24.374:INFO [launcher]: Starting browser PhantomJS
+18 01 2018 15:12:25.560:INFO [PhantomJS 2.1.1 (Mac OS X 0.0.0)]: Connected on socket G5ceT5YV-eFI3FBHAAAA with id 51348084
+PhantomJS 2.1.1 (Mac OS X 0.0.0) INFO LOG: 'TESTS RAN AT 3:12:25 PM EST'
+
+PhantomJS 2.1.1 (Mac OS X 0.0.0): Executed 1 of 1 SUCCESS (0.002 secs / 0 secs)
+TOTAL: 1 SUCCESS
+```
+
+**Important Note:** Sometimes, your system may install the most up-to-date version of different packages, and these versions can sometimes have some changes that make them not play so nicely with the other packages we're using! In the React testing world especially, updates are frequently made. If for whatever reason you had some trouble getting these tests up and running, go ahead and move on to the *Implementing Tests for React Components* article, which will have a consistent & functional setup.
+
+## Summary
+
+Front-end applications tend to grow in complexity quite quickly as user
+interfaces become more interactive and the size of your application state
+increases. Testing your React application will allow you to better handle this
+complexity because they will inform you if new features have broken any existing ones. In this article, we introduced the Enzyme testing library, which has
+an intuitive and flexible API that makes it easy to test React components. By
+using Enzyme, you will have the ability to develop new features in the
+application via Test-Driven Development and increase the maintainability of your
+React application.
+
+### External Resources
+
+* [Enzyme Docs][enzyme-docs]
+* [Enzyme Docs: Shallow Rendering API][enzyme-docs-shallow-rendering-api]
+* [Enzyme Docs: Full Rendering API][enzyme-docs-full-rendering-api]
+* [Jasmine Enzyme Docs][npm-jasmine-enzyme]
+* [React Docs: Test Utilities][react-docs-test-utils]
+* [karma-docs]:https://karma-runner.github.io/0.13/index.html
+* [jasmine-docs]:https://jasmine.github.io/2.4/introduction.html
+* [phantomjs-docs]:http://phantomjs.org/
+* [enzyme-docs]: https://github.com/airbnb/enzyme
+* [enzyme-docs-full-rendering-api]: https://github.com/airbnb/enzyme/blob/master/docs/api/mount.md
+* [enzyme-docs-shallow-rendering-api]: https://github.com/airbnb/enzyme/blob/master/docs/api/shallow.md
+* [enzyme-docs-full-rendering-api-find]: http://airbnb.io/enzyme/docs/api/ReactWrapper/find.html
+* [enzyme-docs-full-rendering-api-props]: http://airbnb.io/enzyme/docs/api/ReactWrapper/props.html
+* [enzyme-docs-full-rendering-api-simulate]: http://airbnb.io/enzyme/docs/api/ReactWrapper/simulate.html
+* [enzyme-docs-full-rendering-api-setstate]: http://airbnb.io/enzyme/docs/api/ReactWrapper/setState.html
+* [enzyme-docs-full-rendering-api-state]: http://airbnb.io/enzyme/docs/api/ReactWrapper/state.html
+* [enzyme-docs-using-enzyme-with-webpack]: https://github.com/airbnb/enzyme/blob/master/docs/guides/webpack.md
+* [jasmine-enzyme-tobepresent]: https://www.npmjs.com/package/jasmine-enzyme#tobepresent
+* [npm-jasmine-enzyme]: https://www.npmjs.com/package/jasmine-enzyme
+* [react-docs-test-utils]: https://facebook.github.io/react/docs/test-utils.html
+* [testing-react-components-repository]: https://github.com/LaunchAcademy/testing-react-components-configuration
+* [testing-react-components-1]: https://s3.amazonaws.com/horizon-production/images/testing-react-components-big-elephant.png
+* [testing-react-components-2]: https://s3.amazonaws.com/horizon-production/images/testing-react-components-baby-elephant.png

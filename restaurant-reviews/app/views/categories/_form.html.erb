@@ -1,0 +1,25 @@
+<%= form_for @category do |f| %>
+
+<% if @category.errors.any? %>
+<!-- if there are errors do something -->
+  <div class="alert">
+    <strong><%= pluralize(@category.errors.count, "error") %> need to be fixed before you may "Add A Category"</strong>
+
+    <ul>
+      <% @category.errors.full_messages.each do |message| %>
+      <!-- do stuff for each error -->
+        <li><%= message %></li>
+        <!-- error message -->
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+  <div class="field">
+    <%= f.label :name %> <br>
+    <%= f.text_field :name %>
+  </div>
+
+  <%= f.submit "Add Category" %>
+
+<% end %>

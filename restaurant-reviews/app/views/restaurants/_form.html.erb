@@ -1,0 +1,51 @@
+<%= form_for @restaurant do |f| %>
+
+<% if @restaurant.errors.any? %>
+<!-- if there are errors do something -->
+  <div class="alert">
+    <strong><%= pluralize(@restaurant.errors.count, "error") %> need to be fixed before you may "Add Restaurant"</strong>
+
+    <ul>
+      <% @restaurant.errors.full_messages.each do |message| %>
+      <!-- do stuff for each error -->
+        <li><%= message %></li>
+        <!-- error message -->
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+  <div class="field">
+    <%= f.label :name %> <br>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :address %> <br>
+    <%= f.text_area :address %>
+  </div>
+
+  <div class="field">
+    <%= f.label :city %> <br>
+    <%= f.text_area :city %>
+  </div>
+
+  <div class="field">
+    <%= f.label :state %> <br>
+    <%= f.text_area :state %>
+  </div>
+
+  <div class="field">
+    <%= f.label :zip %> <br>
+    <%= f.text_area :zip %>
+  </div>
+
+  <div class="field">
+    <%= f.label :description %> <br>
+    <%= f.text_area :description %>
+  </div>
+
+
+  <%= f.submit "Add Restaurant" %>
+
+<% end %>

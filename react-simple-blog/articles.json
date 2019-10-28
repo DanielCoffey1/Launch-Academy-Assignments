@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "title": "JavaScript Promises",
+    "body": "Don't make Promises you can't resolve!"
+  },
+  {
+    "id": 2,
+    "title": "Just Harry Potter Things...",
+    "body": "Something something muggle. Something something hufflepuff."
+  },
+  {
+    "articleTitle": "Hello",
+    "articleBody": "fsdsd",
+    "id": 3
+  },
+  {
+    "articleTitle": "Hello",
+    "articleBody": "fsdsd",
+    "id": 4
+  },
+  {
+    "articleTitle": "Hello",
+    "articleBody": "fsdsd",
+    "id": 5
+  },
+  {
+    "title": "Hello",
+    "body": "f",
+    "id": 6
+  },
+  {
+    "title": "d",
+    "body": "d",
+    "id": 7
+  },
+  {
+    "title": "test",
+    "body": "d",
+    "id": 8
+  },
+  {
+    "title": "diditwork",
+    "body": "yes",
+    "id": 9
+  }
+]

@@ -1,0 +1,31 @@
+<!--  YOUR CODE HERE -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Veggie Recipe Printer</title>
+</head>
+
+<body>
+  <h1><%= @name %></h1>
+
+  <h2>Ingredients</h2>
+    <ul>
+      <% @ingredients.each do |ingredient| %>
+      <li>
+        <%= ingredient %>
+      </li>
+    <% end %>
+    </ul>
+
+    <h3>Directions</h3>
+    <ol>
+      <% @directions.each do |direction| %>
+      <li>
+      <%= direction %>
+      </li>
+      <% end %>
+    </ol>
+
+</body>
+</html>

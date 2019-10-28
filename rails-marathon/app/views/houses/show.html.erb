@@ -1,0 +1,13 @@
+<h1> <%= @house.name %> </h1>
+<p> <%= @house.author %> </p>
+<p> <%= @house.source %> </p>
+<p> <%= @house.motto %> </p>
+
+<h1> <%= 'Members' %> </h1>
+
+<% @members.each do |member| %>
+<li> <%= member.first_name %>
+<%= member.last_name %>
+</li>
+
+<% end %>
